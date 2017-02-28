@@ -1,5 +1,5 @@
 
-Before a shared library fuynction address is being resolved
+Before a shared library function address is being resolved
 
 ```
 (gdb) disassem 0x00007ffff7bd86b5
