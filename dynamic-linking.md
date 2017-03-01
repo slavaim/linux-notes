@@ -1,5 +1,5 @@
 
-Before a shared library function address is being resolved
+Before a shared library function address is being resolved.
 
 ```
 (gdb) disassem 0x00007ffff7bd86b5
@@ -84,7 +84,7 @@ End of assembler dump.
 
 ```
 
-At the time of linking to a shared library
+At the time of linking to a shared library on first function invocation.
 
 ```
 (gdb) bt
@@ -102,7 +102,7 @@ At the time of linking to a shared library
 #7  0x00000000004006f5 in main () at test.c:8
 ```
 
-After the shared library function address has been resolved
+After the shared library function address has been resolved.
 
 ```
 (gdb) bt
