@@ -1,0 +1,3 @@
+[submodule "riscv-notes"]
+	path = riscv-notes
+	url = https://github.com/slavaim/riscv-notes
