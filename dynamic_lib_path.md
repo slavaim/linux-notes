@@ -17,6 +17,8 @@ root@localhost:~# cat /etc/ld.so.conf.d/x86_64-linux-gnu.conf
 /usr/lib/x86_64-linux-gnu
 ```
 
+```ldconfig``` utility manages the cache for mapping dynamic library names to actual paths.
+
 ```
 root@localhost:~# ldconfig -p
 121 libs found in cache `/etc/ld.so.cache'
