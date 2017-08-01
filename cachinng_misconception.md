@@ -1,4 +1,4 @@
-Reading osronline.com forums on Windows file system development I ran into a common misconception among Windows developers regarding UNIX design. http://osronline.com/cf.cfm?PageURL=showThread.CFM?link=285260
+While browsing osronline.com forums on Windows file system development I ran into a common misconception among Windows developers regarding UNIX design. http://osronline.com/cf.cfm?PageURL=showThread.CFM?link=285260
 
 ```
 <QUOTE>
@@ -12,7 +12,7 @@ I spent 5 minutes to bust it.
 
 This is true only for ancient *NIX kernels. Modern kernels use the same technique as NT with caching backed by file mapping structures. 
 
-For example below is a call stack from my test machine running the Linux 4.12.2 kernel when ext4 read operation ext4_file_read_iter called the "Linux cache manager" ( do_generic_file_read -> page_cache_sync_readahead ) to bring data in the cache backed by mapped file structures( struct address_space ) when processing the read() system call. 
+For example below is a call stack from my test machine running the Linux kernel (4.12.2) when ext4 read operation ( ```ext4_file_read_iter``` )  the "Linux cache manager" ( ```do_generic_file_read -> page_cache_sync_readahead``` ) to bring data in the cache backed by mapped file structures( struct address_space ) when processing the read() system call. 
 
 This resulted in a recursive call to mapping->a_ops->readpages into a file system's ext4_readpages . This is an analogue of a cached read in NT.  Mac OS X uses the same caching by file mapping technique borrowed from BSD.
 
