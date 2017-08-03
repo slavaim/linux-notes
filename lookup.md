@@ -14,4 +14,20 @@
 #11 0xffffffff8123eb0e in SyS_newlstat (filename=<optimised out>, statbuf=<optimised out>) at ../fs/stat.c:343
 #12 0xffffffff818aae7b in entry_SYSCALL_64 () at ../arch/x86/entry/entry_64.S:203
 #13 0x00007fc2ac5fb678 in ?? ()
+
+(gdb) f 1
+#1  0xffffffff81245815 in lookup_slow (name=<optimised out>, dir=0xffff88001cd976c0, flags=0) at ../fs/namei.c:1655
+1655			old = inode->i_op->lookup(inode, dentry, flags);
+(gdb) l
+1650					dput(dentry);
+1651					dentry = ERR_PTR(error);
+1652				}
+1653			}
+1654		} else {
+1655			old = inode->i_op->lookup(inode, dentry, flags);
+1656			d_lookup_done(dentry);
+1657			if (unlikely(old)) {
+1658				dput(dentry);
+1659				dentry = old;
+(gdb) 
 ```
