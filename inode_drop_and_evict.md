@@ -11,10 +11,10 @@
 #7  0x0000000001d820f0 in ?? ()
 #8  0x00007ffcfb903290 in ?? ()
 #9  0x0000000000000000 in ?? ()
+
 (gdb) b ext4_evict_inode
 Breakpoint 39 at 0xffffffff812e4b70: file ../fs/ext4/inode.c, line 189.
-(gdb) g
-Ambiguous command "g": gcore, generate-core-file, goto-bookmark, gr, gu, guile, guile-repl.
+
 (gdb) c
 Continuing.
 
