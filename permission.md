@@ -39,6 +39,14 @@ type = struct open_flags {
     int intent;
     int lookup_flags;
 }
+(gdb) ptype tmp
+type = struct filename {
+    const char *name;
+    const char *uptr;
+    struct audit_names *aname;
+    int refcnt;
+    const char iname[];
+} *
 ```
 
 ```
