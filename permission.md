@@ -50,6 +50,21 @@ type = struct filename {
 ```
 
 ```
+#0  generic_permission (inode=0xffff88001dbdd7a0, mask=36) at ../fs/namei.c:337
+#1  0xffffffff812441ab in do_inode_permission (mask=<optimised out>, inode=<optimised out>) at ../fs/namei.c:389
+#2  __inode_permission (inode=0xffff88001dbdd7a0, mask=36) at ../fs/namei.c:424
+#3  0xffffffff81244264 in inode_permission (inode=<optimised out>, mask=<optimised out>) at ../fs/namei.c:475
+#4  0xffffffff8124447a in may_open (path=<optimised out>, acc_mode=<optimised out>, flag=32768) at ../fs/namei.c:2934
+#5  0xffffffff812482cc in do_last (opened=<optimised out>, op=<optimised out>, file=<optimised out>, nd=<optimised out>) at ../fs/namei.c:3375
+#6  path_openat (nd=0xffffc900000d7dc0, op=0xffffc900000d7ef4, flags=<optimised out>) at ../fs/namei.c:3520
+#7  0xffffffff8124a739 in do_filp_open (dfd=<optimised out>, pathname=<optimised out>, op=0xffffc900000d7ef4) at ../fs/namei.c:3555
+#8  0xffffffff81236974 in do_sys_open (dfd=-100, filename=<optimised out>, flags=<optimised out>, mode=<optimised out>) at ../fs/open.c:1055
+#9  0xffffffff81236a7e in SYSC_open (mode=<optimised out>, flags=<optimised out>, filename=<optimised out>) at ../fs/open.c:1073
+#10 SyS_open (filename=<optimised out>, flags=<optimised out>, mode=<optimised out>) at ../fs/open.c:1068
+#11 0xffffffff818aae7b in entry_SYSCALL_64 () at ../arch/x86/entry/entry_64.S:203
+```
+
+```
 #0  generic_permission (inode=0xffff88001dae8520, mask=129) at ../fs/namei.c:337
 #1  0xffffffff812441ab in do_inode_permission (mask=<optimised out>, inode=<optimised out>) at ../fs/namei.c:389
 #2  __inode_permission (inode=0xffff88001dae8520, mask=129) at ../fs/namei.c:424
