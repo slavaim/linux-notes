@@ -1,5 +1,5 @@
 
-The ```current``` task is saved in per scpu space for x86-64 and is accessed through ```gs``` at ```current_task``` offset as
+The ```current``` task is saved in per-cpu space for x86-64 and is accessed through ```gs``` at ```current_task``` offset as
 
 ```
 mov    %gs:0xd440,%rdx
