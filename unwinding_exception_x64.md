@@ -27,27 +27,6 @@ Generally GDB is unable to unwind a kernel call stack with an exception frame on
 Linux has a structure ```struct pt_regs``` to save thread context state. A pointer to this strucrue is provided to an exception processing routine and contains a context of a thread when an exception happened. Using register values from this structure a call stack at the moment of exception can be captured with GDB.
 
 ```
-(gdb) bt
-#0  delay_tsc (__loops=5241148) at ../arch/x86/lib/delay.c:78
-#1  0xffffffff8134b532 in __delay (loops=<optimised out>) at ../arch/x86/lib/delay.c:160
-#2  __const_udelay (xloops=<optimised out>) at ../arch/x86/lib/delay.c:174
-#3  0xffffffff81132620 in panic (fmt=<optimised out>) at ../kernel/panic.c:297
-#4  0xffffffff8101f080 in oops_end (flags=70, regs=0xffffc90000227c18, signr=9) at ../arch/x86/kernel/dumpstack.c:235
-#5  0xffffffff8104d1c7 in no_context (regs=0xffffc90000227c18, error_code=0, address=8, signal=<optimised out>, si_code=<optimised out>) at ../arch/x86/mm/fault.c:867
-#6  0xffffffff8104d456 in __bad_area_nosemaphore (regs=0xffffc90000227c18, error_code=0, address=8, vma=<optimised out>, si_code=196609) at ../arch/x86/mm/fault.c:953
-#7  0xffffffff8104d59f in bad_area_nosemaphore (regs=<optimised out>, error_code=<optimised out>, address=<optimised out>, vma=<optimised out>) at ../arch/x86/mm/fault.c:960
-#8  0xffffffff8104d8e7 in __do_page_fault (regs=0xffffc90000227c18, error_code=0, address=8) at ../arch/x86/mm/fault.c:1387
-#9  0xffffffff8104dccc in do_page_fault (regs=<optimised out>, error_code=<optimised out>) at ../arch/x86/mm/fault.c:1508
-#10 0xffffffff8193ecd2 in page_fault () at ../arch/x86/entry/entry_64.S:1005
-#11 0xffff88001decdb40 in ?? ()
-#12 0xffff88001c02ae48 in ?? ()
-#13 0xffffc90000227d98 in ?? ()
-#14 0xffff88001d733000 in ?? ()
-#15 0xffffc90000227cf0 in ?? ()
-#16 0xffff88001d733000 in ?? ()
-#17 0xffff88001cd02510 in ?? ()
-#18 0xffffc90000227e18 in ?? ()
-#19 0x0000000000000000 in ?? ()
 (gdb) f 8
 #8  0xffffffff8104d8e7 in __do_page_fault (regs=0xffffc90000227c18, error_code=0, address=8) at ../arch/x86/mm/fault.c:1387
 1387				bad_area_nosemaphore(regs, error_code, address, NULL);
