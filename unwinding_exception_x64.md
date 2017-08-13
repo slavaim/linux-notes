@@ -39,32 +39,44 @@ Having a valid regs pointer set register values.
 $2 = {r15 = 0xffff88001decdb40, r14 = 0xffff88001c02ae48, r13 = 0xffffc90000227d98, r12 = 0xffff88001d733000, bp = 0xffffc90000227cf0, bx = 0xffff88001d733000, r11 = 0xffff88001cd02510, 
   r10 = 0xffffc90000227e18, r9 = 0x0, r8 = 0xffff88001fc9d180, ax = 0x0, cx = 0x0, dx = 0x1000, si = 0xffff88001d733000, di = 0xffffc90000227d00, orig_ax = 0xffffffffffffffff, ip = 0xffffffff811aa30c, 
   cs = 0x10, flags = 0x246, sp = 0xffffc90000227cc8, ss = 0x18}
-(gdb) set $rip=regs->ip
-(gdb) p/x $rip
-$3 = 0xffffffff8134b5f4
-(gdb) set $rsp=regs->sp
-No symbol "regs" in current context.
+(gdb) set $rsp=0xffffc90000227cc8
+(gdb) set $rip=0xffffffff811aa30c.
 (gdb) set $rbp=0xffffc90000227cf0
 (gdb) set $rbx=0xffff88001d733000
+(gdb) set $r15=0xffff88001decdb40
+(gdb) set $r14=0xffff88001c02ae48
+(gdb) set $r13=0xffffc90000227d98
+(gdb) set $r12=0xffff88001d733000
+(gdb) set $r11=0xffff88001cd02510
+(gdb) set $r10=0xffffc90000227e18
+(gdb) set $r9=0
+(gdb) set $rsi=0xffff88001d733000
+(gdb) set $rdi=0xffffc90000227d00
 ```
 
 Now a call  stack at the momemnt of exception can be examined.
 
 ```
 (gdb) bt
-#0  delay_tsc (__loops=5241148) at ../arch/x86/lib/delay.c:78
-#1  0xffffffffc0000076 in redirfs_get_filename ()
-#2  0xffffffffc0014121 in dummyflt_release (context=<optimised out>, args=0xffffc90000227d98) at /work/redirfs/src/dummyflt/dummyflt.c:104
-#3  0xffffffffc000892e in rfs_precall_flts ()
-#4  0xffffffffc0002a42 in rfs_release ()
-#5  0xffffffff81193a7a in __fput (file=0xffff88001cd02500) at ../fs/file_table.c:209
-#6  0xffffffff81193bb9 in ____fput (work=<optimised out>) at ../fs/file_table.c:245
-#7  0xffffffff810758b9 in task_work_run () at ../kernel/task_work.c:116
-#8  0xffffffff8105da35 in exit_task_work (task=<optimised out>) at ../include/linux/task_work.h:21
-#9  do_exit (code=<optimised out>) at ../kernel/exit.c:878
-#10 0xffffffff8105f14e in do_group_exit (exit_code=0) at ../kernel/exit.c:982
-#11 0xffffffff8105f1bf in SYSC_exit_group (error_code=<optimised out>) at ../kernel/exit.c:993
-#12 SyS_exit_group (error_code=<optimised out>) at ../kernel/exit.c:991
-#13 0xffffffff8193d060 in entry_SYSCALL_64 () at ../arch/x86/entry/entry_64.S:203
-#14 0x0000000000000000 in ?? ()
+#0  __read_once_size (size=<optimised out>, res=<optimised out>, p=<optimised out>) at ../include/linux/compiler.h:254
+#1  __read_seqcount_begin (s=<optimised out>) at ../include/linux/seqlock.h:112
+#2  raw_read_seqcount_begin (s=<optimised out>) at ../include/linux/seqlock.h:147
+#3  read_seqcount_begin (s=<optimised out>) at ../include/linux/seqlock.h:164
+#4  get_fs_root_rcu (root=<optimised out>, fs=<optimised out>) at ../fs/dcache.c:3222
+#5  d_path (path=0xffffc90000227d00, buf=0xffff88001d733000 "", buflen=4096) at ../fs/dcache.c:3265
+#6  0xffffffffc0000076 in redirfs_get_filename ()
+#7  0xffffffffc0014121 in dummyflt_release (context=<optimised out>, args=0xffffc90000227d98) at /work/redirfs/src/dummyflt/dummyflt.c:104
+#8  0xffffffffc000892e in rfs_precall_flts ()
+#9  0xffffffffc0002a42 in rfs_release ()
+#10 0xffffffff81193a7a in __fput (file=0xffff88001cd02500) at ../fs/file_table.c:209
+#11 0xffffffff81193bb9 in ____fput (work=<optimised out>) at ../fs/file_table.c:245
+#12 0xffffffff810758b9 in task_work_run () at ../kernel/task_work.c:116
+#13 0xffffffff8105da35 in exit_task_work (task=<optimised out>) at ../include/linux/task_work.h:21
+#14 do_exit (code=<optimised out>) at ../kernel/exit.c:878
+#15 0xffffffff8105f14e in do_group_exit (exit_code=0) at ../kernel/exit.c:982
+#16 0xffffffff8105f1bf in SYSC_exit_group (error_code=<optimised out>) at ../kernel/exit.c:993
+#17 SyS_exit_group (error_code=<optimised out>) at ../kernel/exit.c:991
+#18 0xffffffff8193d060 in entry_SYSCALL_64 () at ../arch/x86/entry/entry_64.S:203
+#19 0x0000000000000000 in ?? ()
+
 ```
