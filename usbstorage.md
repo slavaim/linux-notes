@@ -33,6 +33,19 @@
 ```
 
 ```
+#0  hub_port_logical_disconnect (hub=0xffff88040b1a9c00, port1=6) at ../drivers/usb/core/hub.c:919
+#1  0xffffffff81618e0d in usb_reset_and_verify_device (udev=0xffff88040b1a9c00) at ../drivers/usb/core/hub.c:5565
+#2  0xffffffff8161945b in usb_reset_device (udev=0xffff8804081d8000) at ../drivers/usb/core/hub.c:5648
+#3  0xffffffffc05d603d in usb_stor_port_reset (us=0xffff880405d8f7c0) at ../drivers/usb/storage/transport.c:1436
+#4  0xffffffffc05d60e1 in usb_stor_invoke_transport (srb=0xffff880408267548, us=0xffff880405d8f7c0) at ../drivers/usb/storage/transport.c:911
+#5  0xffffffffc05d4dae in usb_stor_transparent_scsi_command (srb=<optimised out>, us=<optimised out>) at ../drivers/usb/storage/protocol.c:124
+#6  0xffffffffc05d75f8 in usb_stor_control_thread (__us=0xffff880405d8f7c0) at ../drivers/usb/storage/usb.c:394
+#7  0xffffffff8109a329 in kthread ()
+#8  0xffffffff818283b5 in ret_from_fork () at ../arch/x86/entry/entry_64.S:424
+#9  0x0000000000000000 in ?? ()
+```
+
+```
 #0  usb_stor_disconnect (intf=0xffff88040a21b400) at ../drivers/usb/storage/usb.c:1091
 #1  0xffffffff81626d52 in usb_unbind_interface (dev=0xffff88040a21b430) at ../drivers/usb/core/driver.c:423
 #2  0xffffffff8155ec31 in __device_release_driver (parent=<optimised out>, dev=<optimised out>) at ../drivers/base/dd.c:833
