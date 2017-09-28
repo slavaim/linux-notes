@@ -140,6 +140,27 @@ type = struct device_driver {
     const struct dev_pm_ops *pm;
     struct driver_private *p;
 } *
+(gdb) p/x *dev->driver
+$38 = {
+  name = 0xffffffffc00537a0, 
+  bus = 0xffffffff81f04500, 
+  owner = 0xffffffffc005b6c0, 
+  mod_name = 0xffffffffc00537d8, 
+  suppress_bind_attrs = 0x0, 
+  probe_type = 0x0, 
+  of_match_table = 0x0, 
+  acpi_match_table = 0x0, 
+  probe = 0xffffffff816273b0, 
+  remove = 0xffffffff81626ce0, 
+  shutdown = 0x0, 
+  suspend = 0x0, 
+  resume = 0x0, 
+  groups = 0x0, 
+  pm = 0x0, 
+  p = 0xffff8803e81d0780
+}
+(gdb) info symbol 0xffffffff816273b0
+usb_probe_interface in section .text of /work/linux/linux-4.12.4/build/vmlinux
 (gdb) ptype struct usb_driver
 type = struct usb_driver {
     const char *name;
