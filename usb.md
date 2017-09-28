@@ -1,5 +1,7 @@
 
-USB core creates an attribut "remove" in sysfs as an interface for safe remove command.
+## Removal
+
+USB core creates an attribute "remove" in sysfs as an interface for safe remove command.
 
 ```
 /* "Safely remove a device" */
@@ -63,6 +65,8 @@ static struct attribute *dev_attrs[] = {
 #29 SyS_write (fd=<optimised out>, buf=140309974454272, count=1) at ../fs/read_write.c:597
 #30 0xffffffff8182813b in entry_SYSCALL_64 () at ../arch/x86/entry/entry_64.S:203
 ```
+
+## Allocation
 
 A usb_device is allocated
 ```
