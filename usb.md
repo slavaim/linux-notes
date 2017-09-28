@@ -112,6 +112,12 @@ Then each interface is matched to a corresponding driver ( the debug session bel
 #28 0xffffffff818283b5 in ret_from_fork () at ../arch/x86/entry/entry_64.S:424
 #29 0x0000000000000000 in ?? ()
 (gdb) p/x dev
+(gdb) x/i 0xffffffffc00521d0
+   0xffffffffc00521d0 <storage_probe>:	nopl   0x0(%rax,%rax,1)
+(gdb) p/x dev->type
+$36 = 0xffffffff81f044c0
+(gdb) info symbol 0xffffffff81f044c0
+usb_if_device_type in section .data of /work/linux/linux-4.12.4/build/vmlinux
 $26 = 0xffff88040543e830
 (gdb) p/x dev->driver
 $27 = 0xffffffffc00561c8
