@@ -63,3 +63,65 @@ static struct attribute *dev_attrs[] = {
 #29 SyS_write (fd=<optimised out>, buf=140309974454272, count=1) at ../fs/read_write.c:597
 #30 0xffffffff8182813b in entry_SYSCALL_64 () at ../arch/x86/entry/entry_64.S:203
 ```
+
+A usb_device is allocated
+```
+0xffffffff8155b1e8 in device_add (dev=<optimised out>) at ../drivers/base/core.c:1650
+warning: Source file is more recent than executable.
+1650			dev->kobj.parent = kobj;
+(gdb) bt
+#0  0xffffffff8155b1e8 in device_add (dev=<optimised out>) at ../drivers/base/core.c:1650
+#1  0xffffffff8161a9e4 in usb_new_device (udev=0xffff8803e8994000) at ../drivers/usb/core/hub.c:2453
+#2  0xffffffff8161c8fe in hub_port_connect (portchange=<optimised out>, portstatus=<optimised out>, port1=<optimised out>, hub=<optimised out>) at ../drivers/usb/core/hub.c:4894
+#3  hub_port_connect_change (portchange=<optimised out>, portstatus=<optimised out>, port1=<optimised out>, hub=<optimised out>) at ../drivers/usb/core/hub.c:4999
+#4  port_event (port1=<optimised out>, hub=<optimised out>) at ../drivers/usb/core/hub.c:5105
+#5  hub_event (work=0xffff8803e80a7bd0) at ../drivers/usb/core/hub.c:5185
+#6  0xffffffff81094648 in process_one_work (worker=0xffff8803e8994098, work=0xffff8803e80a7bd0) at ../kernel/workqueue.c:2097
+#7  0xffffffff81094c7d in worker_thread (__worker=0xffff88040b5ad000) at ../kernel/workqueue.c:2231
+#8  0xffffffff8109a329 in kthread (_create=0xffff88040b5af040) at ../kernel/kthread.c:231
+#9  0xffffffff818283b5 in ret_from_fork () at ../arch/x86/entry/entry_64.S:424
+```
+
+A watchpoint is set for the ```usb_device->dev.kobj.parent``` field to detect inserting in the usb devices hierarchy:
+
+```
+(gdb) p/x &((struct usb_device*)0xffff8803e8994000)->dev.kobj.parent
+$6 = 0xffff8803e89940c0
+(gdb) p ((struct usb_device*)0xffff8803e8994000)->dev.kobj.name
+$7 = 0xffff880406c19990 "2-1.6"
+(gdb) watch *0xffff8803e89940c0
+Hardware watchpoint 3: *0xffff8803e89940c0
+```
+
+The allocated usb_device is being inserted in the hierarchy. The system stops on the watchpoint:
+
+```
+Thread 93 received signal SIGTRAP, Trace/breakpoint trap.
+[Switching to Thread 88]
+0xffffffff8155b1e8 in device_add (dev=<optimised out>) at ../drivers/base/core.c:1650
+warning: Source file is more recent than executable.
+1650			dev->kobj.parent = kobj;
+(gdb) bt
+#0  0xffffffff8155b1e8 in device_add (dev=<optimised out>) at ../drivers/base/core.c:1650
+#1  0xffffffff8161a9e4 in usb_new_device (udev=0xffff8803e8994000) at ../drivers/usb/core/hub.c:2453
+#2  0xffffffff8161c8fe in hub_port_connect (portchange=<optimised out>, portstatus=<optimised out>, port1=<optimised out>, hub=<optimised out>) at ../drivers/usb/core/hub.c:4894
+#3  hub_port_connect_change (portchange=<optimised out>, portstatus=<optimised out>, port1=<optimised out>, hub=<optimised out>) at ../drivers/usb/core/hub.c:4999
+#4  port_event (port1=<optimised out>, hub=<optimised out>) at ../drivers/usb/core/hub.c:5105
+#5  hub_event (work=0xffff8803e80a7bd0) at ../drivers/usb/core/hub.c:5185
+#6  0xffffffff81094648 in process_one_work (worker=0xffff8803e8994098, work=0xffff8803e80a7bd0) at ../kernel/workqueue.c:2097
+#7  0xffffffff81094c7d in worker_thread (__worker=0xffff88040b5ad000) at ../kernel/workqueue.c:2231
+#8  0xffffffff8109a329 in kthread (_create=0xffff88040b5af040) at ../kernel/kthread.c:231
+#9  0xffffffff818283b5 in ret_from_fork () at ../arch/x86/entry/entry_64.S:424
+#10 0x0000000000000000 in ?? ()
+(gdb) l
+1645		pr_debug("device: '%s': %s\n", dev_name(dev), __func__);
+1646	
+1647		parent = get_device(dev->parent);
+1648		kobj = get_device_parent(dev, parent);
+1649		if (kobj)
+1650			dev->kobj.parent = kobj;
+1651	
+1652		/* use parent numa_node */
+1653		if (parent && (dev_to_node(dev) == NUMA_NO_NODE))
+1654			set_dev_node(dev, dev_to_node(parent));
+```
